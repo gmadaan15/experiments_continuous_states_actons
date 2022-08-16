@@ -11,3 +11,8 @@ pip3 install requirements.txt
 pip3 install -e ./gym-env/
 ```
 
+To see the generated results on tensorboard in a web browser, run the below command:
+```
+tensorboard --logdir=runs
+
+```
