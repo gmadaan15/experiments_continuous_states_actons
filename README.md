@@ -6,8 +6,8 @@ The results that we obtain from the pythonised version are similar to the old re
 To run this, make sure that you have python3.8.3 versions and you have run the below commands in sequence.
 
 ### Making the custom environments as gym environments so that its easy to import as well as run.
-
-,,,
+```
 pip3 install requirements.txt
 pip3 install -e ./gym-env/
-,,,
+```
+
