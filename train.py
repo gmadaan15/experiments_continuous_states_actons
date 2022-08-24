@@ -134,7 +134,7 @@ def train(gym_env_name = "Pendulum-v0", continue_training = True, hyperparameter
     obs_size = env.observation_space.shape[0]
     #n_actions = env.action_space.shape[0]
 
-    agent = RlAgentCaba()#RlAgentTiles()#RlAgentCaba()#RlAgentTiles()#RlAgentIns()
+    agent = RlAgentIns()#RlAgentTiles()#RlAgentCaba()#RlAgentTiles()#RlAgentIns()
     agent.agent_init(hyperparameters)
     steps_till_now = 0
     max_episode_reward = float("-inf")
@@ -189,53 +189,10 @@ def train(gym_env_name = "Pendulum-v0", continue_training = True, hyperparameter
     summary_writer.close()
 
 
-def test (gym_env_name = "Pendulum-v0", hyperparameters={}):
-    # Make the environment and model, and train
-    env = gym.make(gym_env_name)
-    obs_size = env.observation_space.shape[0]
-    n_actions = env.action_space.shape[0]
-    actor_critic = FeedForwardNN(obs_size, n_actions)
-    steps_per_batch = hyperparameters["steps_per_batch"]
-
-    _,model_path = get_most_recent_model(gym_env_name)
-    actor_critic.load_state_dict(torch.load(model_path))
-
-    max_episode_reward = float("-inf")
-    num_episodes = 0
-    average_reward = 0
-    episode_reward = 0
-
-    while(True):
-        last_obs = env.reset()
-        for step in range(steps_per_batch):
-
-            env.render()
-
-            value, action, log_probs = actor_critic.act(torch.tensor(last_obs).float())
-
-            obs, reward, done, info = env.step(np.array(action).copy())
-            episode_reward += reward
-
-            if done:
-                episode_reward = float(episode_reward)
-                num_episodes += 1
-                average_reward = average_reward + (1 / num_episodes) * (episode_reward - average_reward)
-                obs = env.reset()
-                if episode_reward > max_episode_reward:
-                    print(episode_reward)
-                    max_episode_reward = episode_reward
-                episode_reward = 0
-
-            last_obs = obs
-        print(average_reward)
-        average_reward = 0
-        num_episodes = 0
-
-
 
 if __name__ == '__main__':
 
-    env = 'gym_envs:double_integrator_env-v0'
+    env = 'gym_envs:pendulum_env-v1'
 
     if env == 'gym_envs:pendulum_env-v0':
         hyperparameters = { 'gamma': 0.99, 'lamda': 0.7, 'alpha': 0.4, "epsilon": 0.05, 'threshold': 0.065, 'fraction':0.6,
